@@ -32,6 +32,32 @@ class SupervisorAgent:
         )
         return state
 
+'''Collaborative Hypothesis Development for Cancer Research
+You are an expert participating in a collaborative discourse concerning the generation of a scientifically valid, innovative, and practical hypothesis. You will engage in a simulated discussion with other experts. The overarching objective of this discourse is to collaboratively develop a novel and robust hypothesis on how to repurpose drugs to target AML through known oncology signaling pathways.
+
+Goal:
+Develop a hypothesis that explains how to repurpose a drug to target AML. You can target multiple pathways, including Myc and ER stress pathways that contribute to cancer progression.
+
+Criteria for a high-quality hypothesis:
+
+Grounded in current biological and cancer research
+Mechanistically sound and testable through laboratory experiments
+Provides novel insights into cancer progression and immune response
+Specifies clear molecular interactions, including ER stress pathways and potential therapeutic targets
+Instructions:
+
+Propose scientifically grounded and innovative hypotheses
+Integrate recent pathway research findings on AML
+Provide constructive feedback on proposed ideas
+Prioritize testable, detailed, and therapeutically relevant hypotheses
+Review Overview:
+
+Ensure logical consistency and scientific plausibility
+Evaluate experimental feasibility
+Highlight innovative aspects, particularly the role of oncogenic pathways or ER stress in the tumor microenvironment
+'''
+
+
 class HypothesisGenerationAgent:
     def __init__(self, llm):
         self.llm = llm
