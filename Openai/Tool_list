@@ -1,0 +1,143 @@
+Automated Deep Search for scRNA-seq Tools Using OpenAI Agents
+Overview
+This project leverages OpenAI's Agents API to perform a structured deep web search for bioinformatics tools related to single-cell RNA sequencing (scRNA-seq). The approach uses category-specific prompts to extract information about preprocessing, normalization, clustering, trajectory inference, and more.
+
+By automating the search process, this method streamlines tool discovery, reducing manual effort while ensuring access to the latest resources from GitHub, official documentation, and research articles.
+
+Setup Instructions
+1. Install Dependencies
+Ensure that you have the necessary Python libraries installed:
+
+bash
+Copy
+Edit
+pip install openai ipython nest_asyncio
+2. Set Up OpenAI API Key
+Replace API_KEY with your actual OpenAI API key:
+
+python
+Copy
+Edit
+import os
+os.environ['OPENAI_API_KEY'] = "your_openai_api_key"
+3. Enable Async Execution in Jupyter Notebook
+To ensure smooth execution in Jupyter:
+
+python
+Copy
+Edit
+import nest_asyncio
+nest_asyncio.apply()
+Implementation
+1. Import Required Modules
+python
+Copy
+Edit
+from agents import Agent, Runner
+from IPython.display import display, Markdown
+import os
+
+# Set up API key
+os.environ['OPENAI_API_KEY'] = "your_openai_api_key"
+
+# Enable nested async execution
+import nest_asyncio
+nest_asyncio.apply()
+2. Define Search Prompts
+We use category-specific prompts to retrieve relevant tools in scRNA-seq analysis:
+
+python
+Copy
+Edit
+prompts = """Category-Specific Deep Search Prompts
+1. Preprocessing & Quality Control
+"Find at least 10 tools for preprocessing and quality control of single-cell RNA-seq (scRNA-seq) data. Include tools for filtering low-quality cells, doublet detection, mitochondrial read filtering, and dataset quality assessment. Provide links to GitHub or official documentation."
+
+2. Normalization & Batch Correction
+"List at least 10 bioinformatics tools for normalization and batch effect correction in single-cell RNA sequencing (scRNA-seq) data. Include methods like SCTransform, Harmony, and MNN. Provide links to documentation and GitHub repositories."
+
+3. Clustering & Dimensionality Reduction
+"Search for at least 10 scRNA-seq tools specialized in clustering and dimensionality reduction. Include methods using PCA, t-SNE, UMAP, and graph-based clustering approaches. Provide official sources and GitHub repositories."
+
+4. Differential Expression Analysis
+"Identify 10+ software packages for performing differential expression analysis in single-cell RNA sequencing (scRNA-seq). Compare statistical models used in each tool. Include links to their GitHub repositories or official documentation."
+
+5. Trajectory Inference & Pseudotime Analysis
+"List at least 10 tools for trajectory inference and pseudotime analysis in single-cell RNA sequencing (scRNA-seq) datasets. Include methods such as Monocle, Slingshot, and SCORPIUS. Provide links to each tool’s documentation and GitHub."
+
+6. Gene Regulatory Networks & Cell-Cell Interactions
+"Find at least 10 computational methods for constructing gene regulatory networks and inferring cell-cell communication from single-cell RNA sequencing (scRNA-seq) data. Include approaches like SCENIC, CellChat, and NicheNet. Provide documentation links."
+
+7. Visualization & Interpretation
+"Gather at least 10 tools designed for visualization and exploration of single-cell RNA sequencing (scRNA-seq) datasets. Include interactive visualization software for gene expression, clustering, and trajectory analysis. Provide GitHub or official tool documentation."
+"""
+3. Execute OpenAI Web Search
+We use OpenAI's responses.create() API call with a web search tool to find relevant resources:
+
+python
+Copy
+Edit
+response = client.responses.create(
+    model="gpt-4o",  # or another supported model
+    input=prompts,
+    tools=[{"type": "web_search"}]
+)
+4. Extract and Display Search Results
+To process and display the retrieved results as markdown:
+
+python
+Copy
+Edit
+# Extract all text from response content
+output_texts = [content.text for message in response.output for content in message.content]
+
+# Combine into one formatted string
+formatted_text = "\n\n".join(output_texts)
+
+# Display in Jupyter Notebook with markdown formatting
+display(Markdown(formatted_text))
+Results
+✔️ Automated Extraction of Bioinformatics Tools
+The script will retrieve and display categorized lists of scRNA-seq tools with:
+
+Tool names
+Features
+GitHub repositories
+Official documentation links
+✔️ Example Output (Rendered in Jupyter)
+markdown
+Copy
+Edit
+### Preprocessing & Quality Control
+1. **Seurat**  
+   - Features: Filtering low-quality cells and mitochondrial reads.  
+   - GitHub: [Seurat](https://github.com/satijalab/seurat)  
+
+2. **Scrublet**  
+   - Features: Doublet detection.  
+   - GitHub: [Scrublet](https://github.com/AllonKleinLab/scrublet)  
+
+3. **DoubletFinder**  
+   - Features: Doublet detection.  
+   - GitHub: [DoubletFinder](https://github.com/chris-mcginnis-ucsf/DoubletFinder)  
+(More categories continue with similar format)
+
+Advantages of This Approach
+✅ Eliminates Manual Searching – Automates deep web search for bioinformatics tools.
+✅ Category-Specific Extraction – Ensures targeted and structured search results.
+✅ Markdown-Friendly Output – Displays in Jupyter Notebook with proper formatting.
+✅ Up-to-Date Resources – Retrieves the latest tools directly from GitHub and official sources.
+
+Future Enhancements
+🔹 Expand Search Scope – Extend queries to cover more omics technologies.
+🔹 Integrate API Calls – Automate data fetching from bioinformatics APIs.
+🔹 Interactive Dashboards – Convert markdown results into interactive data tables.
+
+Conclusion
+This project demonstrates how OpenAI’s web search tools can be used to automate literature and tool discovery in bioinformatics. By leveraging structured prompts and programmatic data extraction, we eliminate manual search time and provide real-time, curated results.
+
+🔗 References & Further Reading
+
+OpenAI API Documentation
+Seurat GitHub Repository
+SCTransform GitHub Repository
