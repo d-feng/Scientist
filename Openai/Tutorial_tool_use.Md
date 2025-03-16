@@ -38,7 +38,7 @@ from agents import Agent, Runner
 from IPython.display import display, Markdown
 import os
 from openai import OpenAI
-
+```
 # Initialize OpenAI Client
 client = OpenAI()
 
