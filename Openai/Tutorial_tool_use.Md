@@ -19,40 +19,44 @@ The script **automates information retrieval** from **GitHub repositories, offic
 Ensure you have Python installed, then install the required libraries:
 ```bash
 pip install openai ipython nest_asyncio
-
+...
 ##2. Set Up OpenAI API Key
 Add your OpenAI API key in your environment:
-```bash
+```python
 import os
 os.environ['OPENAI_API_KEY'] = "your_openai_api_key"
 
 ##3. Enable Async Execution in Jupyter
 If running in a Jupyter Notebook:
-```bash
+```python
 import nest_asyncio
 nest_asyncio.apply()
+...
 ##Implementation
 1. Import Required Modules
-```bash
+```python
 from agents import Agent, Runner
 from IPython.display import display, Markdown
 import os
 from openai import OpenAI
 ```
+
 # Initialize OpenAI Client
+```python
 client = OpenAI()
-
+```
 # Set OpenAI API key
+```python
 os.environ['OPENAI_API_KEY'] = "your_openai_api_key"
-
+```
 # Enable nested async execution in Jupyter
-```bash
+```python
 import nest_asyncio
 nest_asyncio.apply()
-
+```
 ##2. Define Category-Specific Search Prompts
 The script uses structured prompts to find tools in various categories of scRNA-seq analysis:
-```bash
+```python
 prompts = """Category-Specific Deep Search Prompts
 1. Preprocessing & Quality Control
 "Find at least 10 tools for preprocessing and quality control of single-cell RNA-seq (scRNA-seq) data. Include tools for filtering low-quality cells, doublet detection, mitochondrial read filtering, and dataset quality assessment. Provide links to GitHub or official documentation."
@@ -77,15 +81,17 @@ prompts = """Category-Specific Deep Search Prompts
 """
 3. Execute OpenAI Web Search
 The responses.create() function is used to call OpenAI’s GPT-4o with the web search tool enabled:
-```bash
+```
+```python
 response = client.responses.create(
     model="gpt-4o",
     input=prompts,
     tools=[{"type": "web_search"}]
 )
+```
 ##4. Extract and Display Search Results
 Once the search is complete, the results are extracted and displayed in a structured markdown format:
-```bash
+```python
 
 # Extract text content from response output
 output_texts = [content.text for message in response.output for content in message.content]
@@ -95,6 +101,8 @@ formatted_text = "\n\n".join(output_texts)
 
 # Display formatted markdown output in Jupyter Notebook
 display(Markdown(formatted_text))
+
+```
 ##Results
 The script retrieves categorized lists of scRNA-seq tools, providing:
 
@@ -104,7 +112,7 @@ GitHub Repositories
 Official Documentation Links
 
 ✔️ Example Output (Rendered in Jupyter)
-```bash
+```markdown
 ### Preprocessing & Quality Control
 1. **Cell Ranger**  
    - Features: Filtering low-quality cells and mitochondrial content.  
@@ -120,7 +128,7 @@ Official Documentation Links
    - Features: Quality control and normalization.  
    - Documentation: [Bioconductor](https://bioconductor.org/packages/release/bioc/html/scater.html)  
    - GitHub: [scater](https://github.com/dufkot/scater)  
-
+```
 Advantages of This Approach
 ✅ Automates Literature Review – Reduces manual searching effort.
 ✅ Structured & Targeted Search – Uses category-specific queries.
