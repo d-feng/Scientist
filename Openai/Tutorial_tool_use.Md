@@ -41,20 +41,20 @@ import os
 from openai import OpenAI
 ```
 
-# Initialize OpenAI Client
+## Initialize OpenAI Client
 ```python
 client = OpenAI()
 ```
-# Set OpenAI API key
+## Set OpenAI API key
 ```python
 os.environ['OPENAI_API_KEY'] = "your_openai_api_key"
 ```
-# Enable nested async execution in Jupyter
+## Enable nested async execution in Jupyter
 ```python
 import nest_asyncio
 nest_asyncio.apply()
 ```
-##2. Define Category-Specific Search Prompts
+## 2. Define Category-Specific Search Prompts
 The script uses structured prompts to find tools in various categories of scRNA-seq analysis:
 ```python
 prompts = """Category-Specific Deep Search Prompts
@@ -89,7 +89,7 @@ response = client.responses.create(
     tools=[{"type": "web_search"}]
 )
 ```
-##4. Extract and Display Search Results
+## 4. Extract and Display Search Results
 Once the search is complete, the results are extracted and displayed in a structured markdown format:
 ```python
 
@@ -103,7 +103,7 @@ formatted_text = "\n\n".join(output_texts)
 display(Markdown(formatted_text))
 
 ```
-##Results
+## Results
 The script retrieves categorized lists of scRNA-seq tools, providing:
 
 Tool Names
