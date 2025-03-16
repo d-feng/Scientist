@@ -10,3 +10,18 @@ This project is inspired by that vision—leveraging AI and computational approa
 
 Join and be part of a movement that believes **AI is not just a tool but a catalyst for scientific discovery and a force for good**.
 
+
+## 📜 Project Overview  
+
+This repository includes scripts designed to integrate AI-driven hypothesis generation into biomedical research. Below is an introduction to each script:
+
+### 1️⃣ `cosci.py`  
+**Purpose:** This script demonstrates how to use `langgraph` for hypothesis generation in drug repurposing. It provides an example of leveraging structured AI reasoning to identify potential new uses for existing drugs.  
+
+**Key Features:**  
+✅ Implements `langgraph` to drive automated hypothesis generation  
+✅ Applies rationales through prompts  
+✅ Aims to evaluate the power of LLM X Agent  
+
+**Usage:**  
+Use Notebook
