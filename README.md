@@ -25,3 +25,5 @@ This repository includes scripts designed to integrate AI-driven hypothesis gene
 
 **Usage:**  
 Use Notebook
+### 2️⃣ Folder `OpenAI`
+**contain examples of using openai agent sdk **
