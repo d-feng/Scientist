@@ -15,8 +15,8 @@ Join and be part of a movement that believes **AI is not just a tool but a catal
 
 This repository includes scripts designed to integrate AI-driven hypothesis generation into biomedical research. Below is an introduction to each script:
 
-### 1️⃣ `cosci.py`  
-**Purpose:** This script demonstrates how to use `langgraph` for hypothesis generation in drug repurposing. It provides an example of leveraging structured AI reasoning to identify potential new uses for existing drugs.  
+### 1️⃣ `cosci_public.py`  
+**Purpose:** This Co-scientist script demonstrates how to use `langgraph` for hypothesis generation in drug repurposing. It provides an example of leveraging structured AI reasoning to identify potential new uses for existing drugs.  
 
 **Key Features:**  
 ✅ Implements `langgraph` to drive automated hypothesis generation  
