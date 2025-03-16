@@ -129,16 +129,16 @@ Official Documentation Links
    - Documentation: [Bioconductor](https://bioconductor.org/packages/release/bioc/html/scater.html)  
    - GitHub: [scater](https://github.com/dufkot/scater)  
 ```
-Advantages of This Approach
+## Advantages of This Approach
 ✅ Automates Literature Review – Reduces manual searching effort.
 ✅ Structured & Targeted Search – Uses category-specific queries.
 ✅ Fetches Latest Tools – Retrieves real-time GitHub repositories & documentation.
 ✅ Markdown-Formatted Output – Perfect for Jupyter Notebooks.
 
-Future Enhancements
+## Future Enhancements
 🔹 Expand Search Scope – Extend queries to cover other omics technologies.
 🔹 Automate API Calls – Fetch real-time data from bioinformatics APIs.
 🔹 Create Interactive Dashboards – Convert markdown results into interactive tables.
 
-Conclusion
+## Conclusion
 This project demonstrates how OpenAI’s GPT-4o can be used for automating tool discovery in bioinformatics. By leveraging structured prompts and OpenAI’s web search, researchers can quickly identify and access the latest scRNA-seq analysis tools, reducing the time spent on manual literature reviews.
