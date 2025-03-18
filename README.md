@@ -27,3 +27,5 @@ This repository includes scripts designed to integrate AI-driven hypothesis gene
 Use Notebook
 ### 2️⃣ Folder `OpenAI_Agent`
 **contain examples of using openai agent sdk **
+### Folder 'Claude MCP'
+** test MCP server for use. 
