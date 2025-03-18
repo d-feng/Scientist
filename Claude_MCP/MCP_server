@@ -1,1 +1,115 @@
-To be tested.
+# from tutorial for 
+# server.py
+from mcp.server.fastmcp import FastMCP
+
+# Create an MCP server
+mcp = FastMCP("Demo")
+
+
+# Add an addition tool
+@mcp.tool()
+def add(a: int, b: int) -> int:
+    """Add two numbers"""
+    return a + b
+
+# Add a multiplication tool
+@mcp.tool()
+def multiply(a: float, b: float) -> float:
+    """Multiply two numbers"""
+    return a * b
+
+# Add a division tool
+@mcp.tool()
+def divide(a: float, b: float) -> float:
+    """Divide first number by second number"""
+    if b == 0:
+        raise ValueError("Cannot divide by zero")
+    return a / b
+
+# Add a text processing tool
+@mcp.tool()
+def word_count(text: str) -> dict:
+    """Count words, characters, and lines in text"""
+    words = len(text.split())
+    chars = len(text)
+    lines = len(text.splitlines()) or 1
+    return {"words": words, "characters": chars, "lines": lines}
+
+# Add a date tool
+@mcp.tool()
+def get_date_info(date_str: str = None) -> dict:
+    """Get information about a date (format: YYYY-MM-DD) or today's date if none provided"""
+    import datetime
+    
+    if date_str:
+        try:
+            date_obj = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+        except ValueError:
+            raise ValueError("Invalid date format. Please use YYYY-MM-DD")
+    else:
+        date_obj = datetime.datetime.now().date()
+        
+    return {
+        "date": str(date_obj),
+        "day_of_week": date_obj.strftime("%A"),
+        "day_of_year": date_obj.timetuple().tm_yday,
+        "is_leap_year": (date_obj.year % 4 == 0 and date_obj.year % 100 != 0) or (date_obj.year % 400 == 0)
+    }
+
+# Add a temperature converter resource
+@mcp.resource("temperature/convert/{from_unit}/{to_unit}/{value}")
+def convert_temperature(from_unit: str, to_unit: str, value: float) -> dict:
+    """Convert temperature between Celsius, Fahrenheit, and Kelvin
+    Units should be 'c', 'f', or 'k' (case insensitive)
+    """
+    from_unit = from_unit.lower()
+    to_unit = to_unit.lower()
+    
+    # Convert to Celsius first
+    if from_unit == 'c':
+        celsius = value
+    elif from_unit == 'f':
+        celsius = (value - 32) * 5/9
+    elif from_unit == 'k':
+        celsius = value - 273.15
+    else:
+        raise ValueError("From unit must be 'c', 'f', or 'k'")
+    
+    # Convert from Celsius to target unit
+    if to_unit == 'c':
+        result = celsius
+    elif to_unit == 'f':
+        result = celsius * 9/5 + 32
+    elif to_unit == 'k':
+        result = celsius + 273.15
+    else:
+        raise ValueError("To unit must be 'c', 'f', or 'k'")
+    
+    return {
+        "original": f"{value} {from_unit.upper()}",
+        "converted": f"{result:.2f} {to_unit.upper()}",
+        "value": result
+    }
+
+# Add a simple data storage resource
+_data_store = {}
+
+@mcp.resource("data/{key}")
+def get_data(key: str) -> dict:
+    """Get stored data for a given key"""
+    if key not in _data_store:
+        return {"error": "Key not found"}
+    return {"key": key, "value": _data_store[key]}
+
+@mcp.resource("data/{key}", method="POST")
+def store_data(key: str, value: str) -> dict:
+    """Store data with the given key"""
+    _data_store[key] = value
+    return {"status": "success", "key": key}
+
+
+# Add a dynamic greeting resource
+@mcp.resource("greeting://{name}")
+def get_greeting(name: str) -> str:
+    """Get a personalized greeting"""
+    return f"Hello, {name}!"
