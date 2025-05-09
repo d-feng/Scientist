@@ -29,3 +29,6 @@ Use Notebook
 **contain examples of using openai agent sdk **
 ### Folder 'Claude MCP'
 ** test MCP server for use. 
+
+###  `sc_agent.py`
+** for single cell genomic analysis **
