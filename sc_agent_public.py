@@ -61,7 +61,7 @@ if st.button("Choose Dataset"):
 st.title("🧬 Smart Gene Visualization & Pathway Analysis")
 
 # User input
-user_input = st.text_input("Enter a sentence (e.g., 'Violin plot for IL7R', 'Pathway analysis for cluster 1')")
+user_input = st.text_input("Enter a sentence (e.g., 'umap for CD3D', 'Pathway analysis for cluster 1')")
 # Initialize session state for context
 # Initialize session state
 for key in ["context_summary", "fig", "results"]:
