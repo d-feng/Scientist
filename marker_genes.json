@@ -1,0 +1,5 @@
+{
+    "T cells": ["CD3D", "CD8A", "CD4"],
+    "B cells": ["CD79A", "MS4A1"],
+    "Macrophages": ["CD68", "FCGR3A"]
+}
