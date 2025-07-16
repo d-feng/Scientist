@@ -1,4 +1,4 @@
-# 🔬 AI-Powered GEO DEG Analysis Pipeline
+# 🔬 GEO Search and Analysis Agent
 
 This project implements an **AI-integrated pipeline** for analyzing RNA-seq datasets from **NCBI GEO**. It automates the process from gene input → pathway/drug search → GEO dataset retrieval → differential expression analysis (DESeq2) using LangGraph-style agents and OpenAI models.
 
@@ -6,7 +6,7 @@ This project implements an **AI-integrated pipeline** for analyzing RNA-seq data
 
 ## 📌 Features
 
-- 🔎 **Gene-Pathway Extraction** using GPT (`gpt-4o-mini`)
+- 🔎 **Gene-Pathway Extraction** using GPT (`claude or gpt-4o-mini`)
 - 🧚 **GEO dataset discovery** based on genes and pathway-related drugs
 - 📅 **Automated metadata & count file download** via Geofetch and GEO HTML scraping
 - 🧠 **LLM-assisted study design** (selects datasets with proper control vs treated conditions)
