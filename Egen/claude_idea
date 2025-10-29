@@ -73,3 +73,43 @@ Where w_ij = biological prior (which AAb neutralizes which signature)
 ### **Phase 4: Patient Stratification Score**
 ```
 IO_Readiness_Score = Σ(β_k × Pathway_activity_k) - Σ(γ_j × Predicted_AAb_j)
+Where:
+
+β_k from cytokine pathway importance (literature/biology)
+γ_j from dataset 1 logistic regression (AAb effect sizes)
+
+
+IO_Readiness_Score = Σ(β_k × Pathway_activity_k) - Σ(γ_j × Predicted_AAb_j)
+                     \_____________________/   \________________________/
+                            POSITIVE                    NEGATIVE
+                         (Benefit term)              (Risk term)
+```
+
+---
+
+## **Part 1: Σ(β_k × Pathway_activity_k)** - The "Immune Active" Term
+
+### **What it represents:**
+The total cytokine pathway activity weighted by importance for IO therapy response.
+
+### **Components:**
+- **k** = index for each cytokine pathway/signature (k = 1 to 20 in your case)
+- **Pathway_activity_k** = Transcriptomic signature score for pathway k
+  - Calculated via ssGSEA/GSVA from your 20 signatures
+  - Example: IFNγ pathway score = 0.8, IL-2 pathway = 0.6, etc.
+  
+- **β_k** = Weight/importance coefficient for pathway k
+  - **How to determine β_k:**
+    1. **From literature**: Pathways known to predict IO response (e.g., IFNγ signaling strongly predicts anti-PD1 response)
+    2. **From data**: If you have response data, fit: `Response ~ Pathway_1 + Pathway_2 + ... + Pathway_20`
+    3. **Expert weighting**: Rank pathways by biological relevance (1-10 scale)
+
+### **Example:**
+```
+Patient A:
+  IFNγ pathway (β=2.0) × activity=0.8 = 1.6
+  IL-2 pathway (β=1.5) × activity=0.6 = 0.9
+  TNFα pathway (β=1.0) × activity=0.4 = 0.4
+  ... (17 more pathways)
+  
+  Total positive term = 1.6 + 0.9 + 0.4 + ... = 8.5
