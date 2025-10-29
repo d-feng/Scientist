@@ -1,0 +1,75 @@
+Response ~ β_0 + Σ(β_k × AAb_k) + ε
+```
+
+Use logistic regression to identify which autoantibodies predict IO therapy failure:
+- Get odds ratios for each AAb
+- Identify critical AAb threshold titers
+
+**Key output**: AAb risk profile (e.g., anti-IFNγ AAb > threshold → non-responder)
+
+### **Phase 2: Build Transcriptomic Proxy (Dataset 2)**
+
+Since you lack AAb measurements in dataset 2, you need to infer AAb presence from **transcriptomic discordance**:
+
+#### **A. Cytokine-Pathway Discordance Score**
+```
+Discordance_i = Cytokine_expression_i - Downstream_pathway_activity_i
+```
+
+**Logic**: 
+- High cytokine gene expression + Low pathway activity = likely neutralizing AAb
+- Example: High *IFNG* mRNA but low ISG (interferon-stimulated genes) = anti-IFNγ AAb?
+
+**Mathematical implementation**:
+```
+For each cytokine i:
+  Cytokine_score = log2(cytokine_gene_expression)
+  Pathway_score = ssGSEA(downstream_signature_genes)
+  
+  Discordance_i = z_score(Cytokine_score) - z_score(Pathway_score)
+  
+  If Discordance_i > threshold:
+    → Predicted AAb_i = HIGH# For each of 20 cytokine signatures
+for signature in cytokine_signatures:
+    # Score pathway activity in dataset 2
+    pathway_activity[signature] = ssGSEA(dataset2_transcriptome, signature_genes)
+    
+    # Compare to expected activity based on cytokine expression
+    cytokine_expr[signature] = mean_expression(cytokine_genes[signature])
+    
+    # Calculate suppression index
+    suppression_index[signature] = (cytokine_expr - pathway_activity) / cytokine_expr
+```
+
+### **Phase 3: Link to Dataset 1 AAb Profiles**
+
+Create a mapping function:
+```
+Predicted_AAb_profile(patient) = f(transcriptomic_suppression_patterns)
+```
+
+**Specific approach**:
+
+1. **If you have overlap in patients** between datasets:
+   - Train supervised model: `AAb_titer ~ transcriptomic_features`
+   - Apply to dataset 2
+
+2. **If completely separate datasets** (more likely):
+   - Use biological knowledge to map:
+     - Anti-cytokine AAb → specific cytokine pathway suppression
+     - Example: Anti-IFNγ AAb → low IFNG signature despite tissue inflammation
+
+**Matching matrix**:
+```
+         AAb_1  AAb_2  ...  AAb_10
+Sig_1     w11    w12         w1,10
+Sig_2     w21    w22         w2,10
+...
+Sig_20    w20,1  w20,2       w20,10
+```
+
+Where w_ij = biological prior (which AAb neutralizes which signature)
+
+### **Phase 4: Patient Stratification Score**
+```
+IO_Readiness_Score = Σ(β_k × Pathway_activity_k) - Σ(γ_j × Predicted_AAb_j)
