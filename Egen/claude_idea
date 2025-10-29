@@ -189,3 +189,97 @@ IO therapy is like starting a fire:
   Σ(γ_j × AAb_j)     = Amount of water thrown on it (neutralization)
   
   Net Score = How well the fire burns
+
+
+import numpy as np
+from scipy import stats
+
+# === STEP 1: Build Reference Statistics ===
+
+# Example reference cohort (100 healthy controls)
+reference_data = {
+    'IFNG_expression': [5.2, 6.1, 5.8, 6.3, 5.9, 6.5, ...],  # 100 values
+    'ISG_signature': [0.55, 0.62, 0.58, 0.65, 0.59, 0.61, ...]  # 100 values
+}
+
+# Calculate reference parameters
+IFNG_mean = np.mean(reference_data['IFNG_expression'])  # = 6.0
+IFNG_std = np.std(reference_data['IFNG_expression'])    # = 1.5
+
+ISG_mean = np.mean(reference_data['ISG_signature'])     # = 0.6
+ISG_std = np.std(reference_data['ISG_signature'])       # = 0.3
+
+print(f"Reference IFNG: mean={IFNG_mean}, std={IFNG_std}")
+print(f"Reference ISG: mean={ISG_mean}, std={ISG_std}")
+
+# === STEP 2: Measure Patient B ===
+
+# Patient B transcriptome
+patient_B_IFNG = 8.5  # log2(TPM+1) from RNA-seq
+
+# Calculate ISG signature for Patient B
+ISG_genes = ['STAT1', 'IRF1', 'GBP1', 'CXCL9', 'CXCL10', 'IDO1', 'MX1', 'OAS1']
+patient_B_ISG_score = ssGSEA(patient_B_transcriptome, ISG_genes)  # = 0.2
+
+# === STEP 3: Calculate Z-scores ===
+
+IFNG_zscore = (patient_B_IFNG - IFNG_mean) / IFNG_std
+# = (8.5 - 6.0) / 1.5
+# = 2.5 / 1.5
+# = 1.67
+
+ISG_zscore = (patient_B_ISG_score - ISG_mean) / ISG_std
+# = (0.2 - 0.6) / 0.3
+# = -0.4 / 0.3
+# = -1.33
+
+print(f"Patient B IFNG z-score: {IFNG_zscore:.2f}")  # 1.67 (HIGH)
+print(f"Patient B ISG z-score: {ISG_zscore:.2f}")    # -1.33 (LOW)
+
+# === STEP 4: Calculate Discordance ===
+
+discordance = IFNG_zscore - ISG_zscore
+# = 1.67 - (-1.33)
+# = 1.67 + 1.33
+# = 3.0
+
+print(f"Discordance: {discordance:.2f}")  # 3.0 (LARGE GAP!)
+
+# === STEP 5: Convert to AAb Probability ===
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+AAb_probability = sigmoid(discordance)
+# = 1 / (1 + exp(-3.0))
+# = 1 / (1 + 0.0498)
+# = 0.95
+
+print(f"Predicted anti-IFNγ AAb probability: {AAb_probability:.2f}")  # 0.95
+```
+
+---
+
+## **Visual Interpretation**
+```
+Normal Relationship (No AAb):
+=====================================
+IFNG expression:  ----●---- [high]
+                       |
+                       | (correlation ~0.7)
+                       ↓
+ISG activity:     ----●---- [high]
+
+Both elevated together ✓
+
+
+Patient B (Suspected AAb):
+=====================================
+IFNG expression:  --------●-- [VERY HIGH, z=1.67]
+                           |
+                           | ⚠️ DISCONNECTED
+                           ↓ (AAb neutralizes)
+ISG activity:     --●-------- [LOW, z=-1.33]
+
+Discordance = 1.67 - (-1.33) = 3.0
+             (The GAP between source and effect)
